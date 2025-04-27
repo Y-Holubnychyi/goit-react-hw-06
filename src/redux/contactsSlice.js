@@ -11,6 +11,12 @@ export const contactsSlice = createSlice({
   reducers: {
     addContact: (state, action) => {
       const newContact = action.payload;
+
+      if (!newContact.name.trim()) {
+        alert("Name cannot be empty or just spaces!");
+        return;
+      }
+
       const contactExists = state.contacts.items.some(
         (contact) =>
           contact.name === newContact.name ||
