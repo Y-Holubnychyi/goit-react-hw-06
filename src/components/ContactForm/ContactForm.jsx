@@ -1,59 +1,57 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import * as yup from "yup";
+import { addContact } from "../../redux/contactsSlice";
 import { nanoid } from "nanoid";
+import { useDispatch } from "react-redux";
 import s from "./ContactForm.module.css";
 
-const ContactSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, "Must be at least 2 characters")
-    .max(50, "Must be 50 characters or less")
-    .required("Required")
-    .test(
-      "no-whitespace",
-      "Name cannot be just spaces",
-      (value) => value.trim().length > 0
-    ),
+const initialValues = {
+  name: "",
+  number: "",
+  id: "",
+};
 
-  number: Yup.string()
-    .matches(/^(\+?[\d\s\-()]){7,}$/, "Phone number is not valid")
-    .test(
-      "no-repeated-digits",
-      "Phone number cannot be all the same digit",
-      (value) => {
-        if (value) {
-          const repeatedDigits = /^(.)\1*$/.test(value);
-          return !repeatedDigits;
-        }
-        return true;
-      }
-    )
-    .required("Phone number is required"),
+const regex = /^(?=.*?[1-9])[0-9()-]+$/;
+
+const addProfileSchema = yup.object({
+  name: yup
+    .string()
+    .min(3, "name should have at least 3 symbols")
+    .max(50, "name should have less than 50 symbols")
+    .required("Name is required"),
+  number: yup
+    .string()
+    .required("phone is required")
+    .min(3, "too short!")
+    .max(50, "too long!")
+    .matches(regex, "enter valid number"),
 });
 
-function ContactForm({ onAddContact }) {
-  const handleSubmit = (values, actions) => {
-    const newContact = {
-      id: nanoid(),
-      name: values.name,
-      number: values.number,
-    };
-    onAddContact(newContact);
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const onAddProfile = (formData, actions) => {
     actions.resetForm();
+    const finalUser = {
+      ...formData,
+      id: nanoid(),
+    };
+    const action = addContact(finalUser);
+    dispatch(action);
   };
 
   return (
     <Formik
-      initialValues={{ name: "", number: "" }}
-      validationSchema={ContactSchema}
-      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      onSubmit={onAddProfile}
+      validationSchema={addProfileSchema}
     >
       <Form className={s.formWrapper}>
         <label className={s.label}>
           Name
           <Field
+            className={s.input}
             type="text"
             name="name"
-            className={s.input}
             placeholder="Enter your name"
           />
           <ErrorMessage name="name" component="div" className={s.error} />
@@ -62,9 +60,9 @@ function ContactForm({ onAddContact }) {
         <label className={s.label}>
           Number
           <Field
+            className={s.input}
             type="text"
             name="number"
-            className={s.input}
             placeholder="Enter phone number"
           />
           <ErrorMessage name="number" component="div" className={s.error} />
@@ -76,6 +74,6 @@ function ContactForm({ onAddContact }) {
       </Form>
     </Formik>
   );
-}
+};
 
 export default ContactForm;
