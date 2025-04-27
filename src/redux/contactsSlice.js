@@ -10,7 +10,18 @@ export const contactsSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     addContact: (state, action) => {
-      state.contacts.items.push(action.payload);
+      const newContact = action.payload;
+      const contactExists = state.contacts.items.some(
+        (contact) =>
+          contact.name === newContact.name ||
+          contact.number === newContact.number
+      );
+
+      if (!contactExists) {
+        state.contacts.items.push(newContact);
+      } else {
+        alert("Contact with this name or number already exists!");
+      }
     },
     deleteContact: (state, action) => {
       state.contacts.items = state.contacts.items.filter(

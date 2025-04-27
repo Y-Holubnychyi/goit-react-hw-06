@@ -5,14 +5,6 @@ import { nanoid } from "nanoid";
 import { useDispatch } from "react-redux";
 import s from "./ContactForm.module.css";
 
-const initialValues = {
-  name: "",
-  number: "",
-  id: "",
-};
-
-const regex = /^(?=.*?[1-9])[0-9()-]+$/;
-
 const addProfileSchema = yup.object({
   name: yup
     .string()
@@ -24,19 +16,27 @@ const addProfileSchema = yup.object({
     .required("phone is required")
     .min(3, "too short!")
     .max(50, "too long!")
-    .matches(regex, "enter valid number"),
+    .matches(/^(?=.*?[1-9])[0-9()-]+$/, "enter valid number"),
 });
+
+const initialValues = {
+  name: "",
+  number: "",
+  id: "",
+};
 
 const ContactForm = () => {
   const dispatch = useDispatch();
+
   const onAddProfile = (formData, actions) => {
-    actions.resetForm();
     const finalUser = {
       ...formData,
       id: nanoid(),
     };
-    const action = addContact(finalUser);
-    dispatch(action);
+
+    dispatch(addContact(finalUser));
+
+    actions.resetForm();
   };
 
   return (
