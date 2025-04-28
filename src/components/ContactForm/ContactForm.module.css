@@ -1,10 +1,11 @@
 .formWrapper {
   padding: 1rem;
-  max-width: 400px;
+  max-width: 360px;
   margin: 0 auto;
   background-color: #f9f9f9;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #4caf50;
 }
 
 .formWrapper .form {
@@ -46,6 +47,7 @@
 
 .button:hover {
   background-color: #45a049;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .error {

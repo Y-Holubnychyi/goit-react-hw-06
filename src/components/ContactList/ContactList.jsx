@@ -8,7 +8,7 @@ const ContactList = () => {
   const selectNameFilter = useSelector((state) => state.filter.filters.name);
 
   if (!contacts || contacts.length === 0) {
-    return <p>Loading contacts...</p>;
+    return <p>No contacts found. Add a new contact to start!</p>;
   }
 
   const filteredUsers = contacts.filter((user) =>
