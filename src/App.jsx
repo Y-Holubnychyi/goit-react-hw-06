@@ -11,7 +11,17 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
         <div className="appContainer">
-          <h1>Phonebook</h1>
+          <h1
+            style={{
+              fontFamily: "'Courier New', Courier, monospace",
+              fontSize: "36px",
+              color: "#4caf50",
+              textAlign: "center",
+            }}
+          >
+            Phonebook
+          </h1>
+
           <ContactForm />
           <SearchBox />
           <ContactList />
